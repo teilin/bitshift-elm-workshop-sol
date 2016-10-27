@@ -4,6 +4,7 @@ import ExerciseRunner exposing (..)
 import Html exposing (Html)
 import Html.Attributes
 import String
+import List
 
 
 --
@@ -13,19 +14,19 @@ import String
 
 sayHello : String -> String
 sayHello friendsName =
-    "TODO: implement me"
+    "Hello, " ++ friendsName
 
 
 formatPhoneNumber : String -> String -> String -> String
 formatPhoneNumber areaCode exchange local =
     -- desired format: (999) 999-9999
-    "TODO: implement me"
+    "(" ++ areaCode ++ ")" ++ " " ++ exchange ++ "-" ++ local 
 
 
 initials : String -> String -> String
 initials firstName lastName =
     -- HINT: look at http://package.elm-lang.org/packages/elm-lang/core/latest/String for useful functions
-    "TODO: implement me"
+    String.left 1 firstName ++ String.left 1 lastName
 
 
 pigLatin : String -> String
@@ -34,7 +35,16 @@ pigLatin word =
     -- and put it at the end of the word, followed by an "ay" sound.
     -- Pig latin, in pig latin, is "Ig-pay atin-lay"
     -- For this exercise, just worry about producing a single word in pig latin.
-    "TODO: implement me"
+    let preFix = String.slice 1 2 word
+                    |> String.toUpper
+
+        middle = String.dropLeft 2 word
+
+        end = String.left 1 word
+                    |> String.toLower
+    in 
+
+    preFix ++ middle ++ "-" ++ end ++ "ay"
 
 
 
@@ -45,15 +55,22 @@ pigLatin word =
 
 isGreaterThanTen : Int -> Bool
 isGreaterThanTen x =
-    -- TODO: implement me
-    False
+    if x > 10 then
+        True
+    else
+        False
 
 
 howHotIsThePepper : Float -> String
 howHotIsThePepper heatUnits =
-    "TODO: implement me"
-
-
+    if heatUnits == 2 then 
+        "not hot" 
+    else if heatUnits >= 50000 then
+        "hot"
+    else if heatUnits >= 3000 then
+        "medium"
+    else 
+        "mild"
 
 --
 -- Lists
@@ -64,19 +81,26 @@ reverseTheList : List a -> List a
 reverseTheList inputList =
     -- TODO: return the reversed inputList
     -- HINT: look at http://package.elm-lang.org/packages/elm-lang/core/latest/List for useful functions
-    []
+    List.reverse inputList
 
 
+increaseOne n = 
+    n + 1
 addOne : List Int -> List Int
 addOne inputList =
-    -- TODO: add one to every item in the list
-    []
+    -- TODO: add one to every item in the List
+    List.map increaseOne inputList
 
+startWithO word =
+    if String.startsWith "O" word then
+        False
+    else
+        True
 
 removeOs : List String -> List String
 removeOs inputList =
     -- TODO: remove all entries that start with "O"
-    []
+    List.filter startWithO inputList
 
 
 
@@ -92,32 +116,34 @@ type alias Person =
 newborn : String -> { name : String, age : Int }
 newborn name =
     -- TODO: fix me
-    { name = "", age = -1 }
+    { name = name, age = 0 }
 
 
 ageDifference : { name : String, age : Int } -> { name : String, age : Int } -> Int
 ageDifference person1 person2 =
     -- TODO: fix me
-    0
+    person1.age - person2.age
+    |> Basics.abs
 
 
 nameChange : String -> { name : String, age : Int } -> { name : String, age : Int }
 nameChange newName person =
     -- TODO: fix me
-    person
+    { person | name = newName }
+
 
 
 getOlder : { name : String, age : Int } -> { name : String, age : Int }
 getOlder person =
     -- TODO: fix me
-    person
+    { person | age = increaseOne person.age }
 
 
 combinedYears : List { name : String, age : Int } -> Int
 combinedYears people =
     -- TODO: fix me
-    0
-
+    List.map .age people
+        |> List.foldr (+) 0
 
 
 --
@@ -128,7 +154,15 @@ combinedYears people =
 signAndMagnitude : Int -> ( String, Int )
 signAndMagnitude x =
     -- TODO: implement me
-    ( "TODO", 0 )
+    let 
+        sign = if x >= 0 then
+                    "+"
+               else
+                    "-"
+        mang = Basics.abs x
+
+                    in
+    ( sign, mang )
 
 
 
